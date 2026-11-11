@@ -23,8 +23,7 @@ $("#signin").addEventListener("click", async () => {
 });
 $("#signout").addEventListener("click", (e) => { e.preventDefault(); teacherSignOut(); });
 
-try {
-  watchTeacher(async (user) => {
+watchTeacher(async (user) => {
     if (!user) {
       $("#lock").classList.remove("hidden"); $("#board").classList.add("hidden");
       return;
@@ -37,8 +36,7 @@ try {
       lockMsg(`${user.email} — ${e.message}`);
       await teacherSignOut();
     }
-  });
-} catch (e) { lockMsg(e.message); }
+}).catch((e) => lockMsg(e.message));
 
 function filtered() {
   const q = $("#q").value.trim().toLowerCase();
