@@ -1,0 +1,41 @@
+rules_version = '2';
+// Firebase 콘솔 → Firestore Database → 규칙(Rules) 탭에 전체를 붙여넣고 [게시]하세요.
+// ▼ 아래 이메일을 선생님 구글 계정으로 바꾸세요. (여러 명이면 쉼표로 추가)
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isTeacher() {
+      return request.auth != null
+        && request.auth.token.email_verified == true
+        && request.auth.token.email in ['teacher@example.com'];
+    }
+
+    // 학번 → 이름 고정 (다른 이름으로 같은 학번을 쓰지 못하게)
+    match /owners/{sid} {
+      allow read, delete: if isTeacher();
+      allow create: if sid.matches('^[0-9]{4,6}$')
+        && request.resource.data.keys().hasOnly(['name'])
+        && request.resource.data.name is string
+        && request.resource.data.name.size() >= 2
+        && request.resource.data.name.size() <= 20;
+      allow update: if request.resource.data.name == resource.data.name
+        && request.resource.data.keys().hasOnly(['name']);
+    }
+
+    // 학생 제출 문서: ID = "학번_이름"
+    match /submissions/{docId} {
+      allow get: if true;            // 학번+이름을 정확히 알아야만 열람 가능
+      allow list, delete: if isTeacher();
+      allow create, update: if
+        docId == request.resource.data.studentId + '_' + request.resource.data.name
+        && request.resource.data.keys().hasOnly(['studentId', 'name', 'entries', 'updatedAt'])
+        && request.resource.data.studentId.matches('^[0-9]{4,6}$')
+        && request.resource.data.entries is map
+        && request.resource.data.entries.size() >= 2
+        && request.resource.data.entries.size() <= 7
+        && request.resource.data.updatedAt == request.time
+        && getAfter(/databases/$(database)/documents/owners/$(request.resource.data.studentId)).data.name
+           == request.resource.data.name;
+    }
+  }
+}

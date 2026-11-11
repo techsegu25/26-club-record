@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CANOPY 스마트 지원단 · 활동 기록 제출</title>
+  <meta name="description" content="CANOPY 스마트 지원단 동아리 활동 기록 제출" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌱</text></svg>" />
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="wrap">
+      <div class="eyebrow">CANOPY 스마트 지원단 · 동아리 활동 기록</div>
+      <h1>내가 한 역할과 배운 점을 기록해요 🌱</h1>
+      <p>1학년 기존 텃밭을 '스마트 텃밭'으로 만들기 위한 우리의 노력을 남겨 주세요.</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- STEP 1: 학번·이름 -->
+    <section id="step-login" class="card">
+      <h2>학번과 이름을 입력하세요</h2>
+      <p class="sub">이미 제출했다면 같은 학번·이름으로 들어와서 내용을 수정할 수 있어요.</p>
+      <form id="login-form" autocomplete="off">
+        <div class="row">
+          <label class="field">
+            <span>학번<em>*</em></span>
+            <input type="text" id="studentId" inputmode="numeric" maxlength="6" placeholder="예: 10101" required />
+            <small>학년·반·번호 숫자 (예: 1학년 1반 1번 → 10101)</small>
+          </label>
+          <label class="field">
+            <span>이름<em>*</em></span>
+            <input type="text" id="name" maxlength="20" placeholder="예: 홍길동" required />
+          </label>
+        </div>
+        <button class="btn block" type="submit" id="login-btn">시작하기</button>
+        <div id="login-msg" class="msg err hidden"></div>
+      </form>
+    </section>
+
+    <!-- STEP 2: 활동 선택 + 작성 -->
+    <section id="step-write" class="hidden">
+      <div class="card who">
+        <div>👋 <b id="who-name"></b> <span id="who-id" style="color:var(--muted)"></span></div>
+        <button class="btn ghost small" type="button" id="logout-btn">다른 학번으로</button>
+      </div>
+
+      <div class="card">
+        <h2>작성할 활동을 고르세요</h2>
+        <p class="sub">1학기·2학기 활동은 꼭 작성하고, 체험 활동은 내가 참여한 것을 골라 주세요.</p>
+        <div id="choices"></div>
+      </div>
+
+      <form id="entries-form" novalidate>
+        <div id="forms"></div>
+        <div class="sticky">
+          <button class="btn block" type="submit" id="submit-btn">제출하기</button>
+          <div id="submit-msg" class="msg err hidden"></div>
+          <div class="saved-note" id="draft-note">작성 중인 내용은 이 기기에 임시 저장돼요.</div>
+        </div>
+      </form>
+    </section>
+
+    <!-- STEP 3: 완료 -->
+    <section id="step-done" class="card done hidden">
+      <div class="big">🎉</div>
+      <h2>제출이 완료되었어요!</h2>
+      <p class="sub" id="done-text"></p>
+      <ul class="summary" id="done-list"></ul>
+      <div style="display:flex; gap:10px; justify-content:center; margin-top:20px; flex-wrap:wrap">
+        <button class="btn ghost" type="button" id="edit-btn">내용 수정하기</button>
+        <button class="btn" type="button" id="finish-btn">처음으로</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>CANOPY 스마트 지원단 · 문의는 담당 선생님께</footer>
+
+  <template id="tpl-act">
+    <section class="card act">
+      <h2 class="act-title"></h2>
+      <p class="context"></p>
+      <div class="slot-link"></div>
+      <div class="field">
+        <span>내가 맡은 역할 (해당하는 것 모두 선택)</span>
+        <div class="tags"></div>
+      </div>
+      <label class="field">
+        <span>내가 한 역할 – 구체적으로<em>*</em></span>
+        <textarea name="role" maxlength="2000" required></textarea>
+        <div class="counter"></div>
+      </label>
+      <label class="field">
+        <span>배운 점 · 느낀 점<em>*</em></span>
+        <textarea name="learned" maxlength="2000" required></textarea>
+        <div class="counter"></div>
+      </label>
+      <label class="field">
+        <span>어려웠던 점 · 기억에 남는 장면 <small style="display:inline">(선택)</small></span>
+        <textarea name="detail" maxlength="2000" style="min-height:80px"></textarea>
+      </label>
+    </section>
+  </template>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
